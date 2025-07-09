@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 echo "🚀 Setting up Solana Arbitrage Development Environment"
@@ -23,28 +22,29 @@ sudo apt-get install -y \
     gnupg \
     lsb-release
 
-# Install Node.js v23.11.0
+# Install Node.js v23.11.0 (original)
 echo "📱 Installing Node.js v23.11.0..."
 curl -fsSL https://nodejs.org/dist/v23.11.0/node-v23.11.0-linux-x64.tar.xz -o node-v23.11.0-linux-x64.tar.xz
 sudo tar -C /usr/local --strip-components=1 -xJf node-v23.11.0-linux-x64.tar.xz
 rm node-v23.11.0-linux-x64.tar.xz
 
-# Install Yarn v1.22.22
+# Install Yarn v1.22.22 (original)
 echo "🧶 Installing Yarn v1.22.22..."
 curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.22.22
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
-# Install Rust v1.86
+# Install Rust v1.86 (original)
 echo "🦀 Installing Rust v1.86..."
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.86.0
 source $HOME/.cargo/env
 
-# Install Solana CLI v2.2.20
+# >>> SOLANA v2.2.20 (ORIGINAL VERSION) <<<
 echo "☀️ Installing Solana CLI v2.2.20..."
 sh -c "$(curl -sSfL https://release.anza.xyz/v2.2.20/install)"
 export PATH="/home/vscode/.local/share/solana/install/active_release/bin:$PATH"
+solana --version
 
-# Install Anchor v0.31.1
+# Install Anchor v0.31.1 (original)
 echo "⚓ Installing Anchor v0.31.1..."
 cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
 avm install 0.31.1
