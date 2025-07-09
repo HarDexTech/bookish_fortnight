@@ -1,17 +1,102 @@
 {
-  "name": "Solana Arbitrage",
-  "image": "mcr.microsoft.com/devcontainers/rust:1-1-bookworm",
+  "name": "Solana Arbitrage Bot - Full Stack",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
   "features": {
-    "ghcr.io/devcontainers/features/node:1": { "version": "20" }
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "ppa": true,
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/rust:1": {
+      "version": "latest",
+      "profile": "default"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "nodeGypDependencies": true,
+      "version": "18"
+    }
   },
-  "postCreateCommand": "bash .devcontainer/setup.sh",
   "customizations": {
     "vscode": {
       "extensions": [
         "rust-lang.rust-analyzer",
-        "ms-vscode.vscode-typescript-next"
-      ]
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-eslint",
+        "formulahendry.auto-rename-tag",
+        "christian-kohler.path-intellisense",
+        "ms-vscode.vscode-npm-script",
+        "streetsidesoftware.code-spell-checker",
+        "gruntfuggly.todo-tree",
+        "ms-vscode.vscode-json",
+        "vadimcn.vscode-lldb"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": true,
+          "source.organizeImports": true
+        },
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "files.autoSave": "afterDelay",
+        "files.autoSaveDelay": 1000,
+        "typescript.preferences.importModuleSpecifier": "relative",
+        "javascript.preferences.importModuleSpecifier": "relative",
+        "rust-analyzer.checkOnSave.command": "clippy",
+        "rust-analyzer.cargo.features": "all",
+        "eslint.workingDirectories": ["src"],
+        "json.format.keepLines": true
+      }
     }
   },
-  "remoteUser": "vscode"
+  "postCreateCommand": "chmod +x .devcontainer/setup.sh && .devcontainer/setup.sh",
+  "postStartCommand": "echo '🚀 Solana Arbitrage Bot environment is ready!' && echo '📋 Quick commands:' && echo '   npm start           - Start the bot' && echo '   npm run dev         - Start with auto-reload' && echo '   solana balance      - Check wallet balance' && echo '   solana airdrop 2    - Request SOL airdrop (devnet)' && echo '   anchor build        - Build Anchor programs' && echo '   solana-test-validator - Start local validator'",
+  "remoteUser": "vscode",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "forwardPorts": [3000, 8080, 8899, 8900],
+  "portsAttributes": {
+    "3000": {
+      "label": "Frontend Dashboard",
+      "onAutoForward": "notify"
+    },
+    "8080": {
+      "label": "API Server",
+      "onAutoForward": "notify"
+    },
+    "8899": {
+      "label": "Solana Test Validator RPC",
+      "onAutoForward": "ignore"
+    },
+    "8900": {
+      "label": "Solana Test Validator WebSocket",
+      "onAutoForward": "ignore"
+    }
+  },
+  "mounts": [
+    "source=solana-config,target=/home/vscode/.config/solana,type=volume",
+    "source=cargo-cache,target=/home/vscode/.cargo,type=volume",
+    "source=node-modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
+    "source=anchor-cache,target=/home/vscode/.anchor,type=volume"
+  ],
+  "containerEnv": {
+    "RUST_BACKTRACE": "1",
+    "SOLANA_LOG": "info",
+    "NODE_ENV": "development",
+    "ANCHOR_PROVIDER_URL": "http://localhost:8899",
+    "ANCHOR_WALLET": "/home/vscode/.config/solana/id.json"
+  },
+  "shutdownAction": "stopContainer",
+  "updateContentCommand": "npm install && cargo update && echo '📦 Dependencies updated!'",
+  "waitFor": "postCreateCommand",
+  "onCreateCommand": "echo '🔧 Setting up Solana Arbitrage Bot...'",
+  "initializeCommand": "echo '🚀 Initializing codespace for Solana development...'"
 }
