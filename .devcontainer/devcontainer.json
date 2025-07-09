@@ -1,137 +1,17 @@
 {
-  "name": "Solana Arbitrage Development",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
-  
+  "name": "Solana Arbitrage",
+  "image": "mcr.microsoft.com/devcontainers/rust:1-1-bookworm",
   "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": {
-      "installZsh": true,
-      "installOhMyZsh": true,
-      "upgradePackages": true
-    },
-    "ghcr.io/devcontainers/features/git:1": {
-      "version": "latest"
-    }
+    "ghcr.io/devcontainers/features/node:1": { "version": "20" }
   },
-
+  "postCreateCommand": "bash .devcontainer/setup.sh",
   "customizations": {
     "vscode": {
       "extensions": [
         "rust-lang.rust-analyzer",
-        "tamasfe.even-better-toml",
-        "serayuzgur.crates",
-        "ms-vscode.vscode-typescript-next",
-        "esbenp.prettier-vscode",
-        "bradlc.vscode-tailwindcss",
-        "ms-vscode.vscode-json",
-        "redhat.vscode-yaml",
-        "ms-python.python",
-        "ms-toolsai.jupyter",
-        "GitHub.copilot",
-        "GitHub.copilot-chat"
-      ],
-      "settings": {
-        "rust-analyzer.checkOnSave.command": "clippy",
-        "rust-analyzer.cargo.features": "all",
-        "rust-analyzer.procMacro.enable": true,
-        "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-          "source.fixAll": true
-        },
-        "files.watcherExclude": {
-          "**/target/**": true,
-          "**/node_modules/**": true
-        },
-        "typescript.preferences.importModuleSpecifier": "relative",
-        "javascript.preferences.importModuleSpecifier": "relative"
-      }
+        "ms-vscode.vscode-typescript-next"
+      ]
     }
   },
-
-  "containerEnv": {
-    "PATH": "/home/vscode/.local/share/solana/install/active_release/bin:/home/vscode/.cargo/bin:/home/vscode/.yarn/bin:/home/vscode/.config/yarn/global/node_modules/.bin:${PATH}",
-    "RUST_VERSION": "1.86.0",
-    "NODE_VERSION": "23.11.0",
-    "YARN_VERSION": "1.22.22",
-    "SOLANA_VERSION": "2.2.20",
-    "ANCHOR_VERSION": "0.31.1"
-  },
-
-  "mounts": [
-    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
-    "source=solana-arbitrage-cargo-cache,target=/home/vscode/.cargo/registry,type=volume",
-    "source=solana-arbitrage-target-cache,target=/workspace/target,type=volume",
-    "source=solana-arbitrage-node-modules,target=/workspace/node_modules,type=volume"
-  ],
-
-  "workspaceFolder": "/workspace",
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
-
-  "onCreateCommand": "bash .devcontainer/setup.sh",
-  
-  "postCreateCommand": [
-    "bash",
-    "-c",
-    "echo 'Development container ready! 🚀' && echo 'Solana CLI: v2.2.20' && echo 'Anchor: v0.31.1' && echo 'Rust: v1.86' && echo 'Node.js: v23.11.0' && echo 'Yarn: v1.22.22'"
-  ],
-
-  "remoteUser": "vscode",
-
-  "forwardPorts": [
-    8899,
-    8900,
-    3000,
-    3001,
-    4000,
-    5000,
-    8080,
-    9090
-  ],
-
-  "portsAttributes": {
-    "8899": {
-      "label": "Solana Test Validator",
-      "onAutoForward": "notify"
-    },
-    "8900": {
-      "label": "Solana Faucet",
-      "onAutoForward": "ignore"
-    },
-    "3000": {
-      "label": "Frontend Dev Server",
-      "onAutoForward": "openPreview"
-    },
-    "3001": {
-      "label": "Next.js Dev Server",
-      "onAutoForward": "openPreview"
-    },
-    "4000": {
-      "label": "API Server",
-      "onAutoForward": "notify"
-    },
-    "5000": {
-      "label": "Dashboard",
-      "onAutoForward": "openPreview"
-    },
-    "8080": {
-      "label": "Web Interface",
-      "onAutoForward": "openPreview"
-    },
-    "9090": {
-      "label": "Monitoring",
-      "onAutoForward": "ignore"
-    }
-  },
-
-  "hostRequirements": {
-    "cpus": 2,
-    "memory": "8gb",
-    "storage": "20gb"
-  },
-
-  "shutdownAction": "stopContainer",
-
-  "overrideCommand": false,
-
-  "updateContentCommand": "bash .devcontainer/setup.sh",
-
-  "init": true}
+  "remoteUser": "vscode"
+}
